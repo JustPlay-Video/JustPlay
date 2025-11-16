@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Mux Video Integration** - Complete video upload and playback system
+  - Direct upload API endpoint (`/api/mux/upload`) with admin authentication
+  - Webhook handler (`/api/mux/webhook`) for processing status updates
+  - Mux client utility (`lib/mux/client.ts`) for API operations
+  - MuxUploader component for admin video uploads
+  - MuxPlayer component for video playback with HLS streaming
+  - Database migration adding mux_asset_id, mux_playback_id, mux_upload_id to episodes
+  - Support for both Mux uploads and manual video URLs
+  - Automatic status updates via webhooks (processing → published)
+  - MUX_SETUP.md comprehensive setup and troubleshooting guide
 - Development protocol system with 5 mandatory protocols
 - Feature development workflow (research → plan → implement → document → deploy)
 - Research protocol for checking existing code and documentation
@@ -16,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deployment protocol with pre/post verification checklists
 - Project roadmap tracking phases and progress
 - This CHANGELOG file to track all changes
+
+### Changed
+- Episode creation form now supports two upload methods:
+  - Direct file upload via Mux (client-side upload)
+  - Manual video URL entry (backward compatible)
+- Episodes can be saved with "processing" status during Mux encoding
+- Admin dashboard episode workflow updated for better UX
 
 ---
 

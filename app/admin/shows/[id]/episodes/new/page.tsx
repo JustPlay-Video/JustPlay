@@ -3,6 +3,7 @@
 import { useState, use } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import MuxUploader from '@/components/admin/MuxUploader';
 
 export default function NewEpisodePage({
   params,
@@ -20,9 +21,11 @@ export default function NewEpisodePage({
     episode_number: '1',
     duration_seconds: '',
     video_url: '',
+    mux_upload_id: '',
     status: 'processing',
   });
 
+  const [uploadMethod, setUploadMethod] = useState<'mux' | 'url'>('mux');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -32,6 +35,14 @@ export default function NewEpisodePage({
     setLoading(true);
 
     try {
+      // Validate: either Mux upload OR manual URL required
+      if (uploadMethod === 'mux' && !formData.mux_upload_id) {
+        throw new Error('Please upload a video file using Mux uploader');
+      }
+      if (uploadMethod === 'url' && !formData.video_url) {
+        throw new Error('Please provide a video URL');
+      }
+
       const { error: insertError } = await supabase.from('episodes').insert({
         show_id: showId,
         title: formData.title,
@@ -39,7 +50,8 @@ export default function NewEpisodePage({
         season_number: parseInt(formData.season_number),
         episode_number: parseInt(formData.episode_number),
         duration_seconds: parseInt(formData.duration_seconds),
-        video_url: formData.video_url,
+        video_url: formData.video_url || '',
+        mux_upload_id: formData.mux_upload_id || null,
         status: formData.status,
       });
 
@@ -144,22 +156,68 @@ export default function NewEpisodePage({
           </div>
 
           <div>
-            <label htmlFor="video_url" className="block text-sm font-medium mb-2">
-              Video URL *
+            <label className="block text-sm font-medium mb-3">
+              Video Upload Method *
             </label>
-            <input
-              type="url"
-              id="video_url"
-              required
-              value={formData.video_url}
-              onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-              placeholder="https://example.com/video.mp4 (or Cloudflare Stream URL)"
-              className="w-full rounded-md border-0 py-2 px-3 text-gray-900 dark:text-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600"
-            />
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              For now, use any publicly accessible video URL. We&apos;ll integrate Cloudflare Stream/Mux
-              next.
-            </p>
+            <div className="flex space-x-4 mb-4">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="uploadMethod"
+                  value="mux"
+                  checked={uploadMethod === 'mux'}
+                  onChange={(e) => setUploadMethod(e.target.value as 'mux')}
+                  className="mr-2"
+                />
+                <span>Upload File (Mux)</span>
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="uploadMethod"
+                  value="url"
+                  checked={uploadMethod === 'url'}
+                  onChange={(e) => setUploadMethod(e.target.value as 'url')}
+                  className="mr-2"
+                />
+                <span>Manual URL</span>
+              </label>
+            </div>
+
+            {uploadMethod === 'mux' ? (
+              <div>
+                <MuxUploader
+                  onUploadStart={(uploadId) => {
+                    setFormData({ ...formData, mux_upload_id: uploadId, status: 'processing' });
+                  }}
+                  onSuccess={(uploadId) => {
+                    console.log('Upload complete:', uploadId);
+                  }}
+                  onError={(error) => {
+                    setError(error);
+                  }}
+                />
+                {formData.mux_upload_id && (
+                  <p className="mt-2 text-sm text-green-600">
+                    Upload ID: {formData.mux_upload_id}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="url"
+                  id="video_url"
+                  value={formData.video_url}
+                  onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+                  placeholder="https://example.com/video.mp4"
+                  className="w-full rounded-md border-0 py-2 px-3 text-gray-900 dark:text-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600"
+                />
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Enter a publicly accessible video URL
+                </p>
+              </div>
+            )}
           </div>
 
           <div>
