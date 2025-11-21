@@ -101,10 +101,9 @@ export default function MuxPlayer({
   /**
    * Handle time update events
    */
-  const handleTimeUpdate = (event: React.SyntheticEvent<HTMLVideoElement>) => {
-    if (onTimeUpdate) {
-      const videoElement = event.currentTarget;
-      onTimeUpdate(videoElement.currentTime);
+  const handleTimeUpdate = (event: any) => {
+    if (onTimeUpdate && event?.target) {
+      onTimeUpdate(event.target.currentTime);
     }
   };
 
