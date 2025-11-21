@@ -105,7 +105,7 @@ export default function MuxUploader({ onUploadStart, onSuccess, onError }: MuxUp
   /**
    * Handle upload error
    */
-  const handleError = (event: Event) => {
+  const handleError = () => {
     const errorMessage = 'Upload failed. Please try again.';
     setError(errorMessage);
     if (onError) {
@@ -116,8 +116,8 @@ export default function MuxUploader({ onUploadStart, onSuccess, onError }: MuxUp
   /**
    * Handle upload progress updates
    */
-  const handleProgress = (event: Event) => {
-    const customEvent = event as CustomEvent;
+  const handleProgress = (event: React.SyntheticEvent<HTMLElement>) => {
+    const customEvent = event as any;
     if (customEvent.detail && typeof customEvent.detail === 'number') {
       setUploadProgress(Math.round(customEvent.detail * 100));
     }
