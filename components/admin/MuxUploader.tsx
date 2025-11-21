@@ -116,10 +116,9 @@ export default function MuxUploader({ onUploadStart, onSuccess, onError }: MuxUp
   /**
    * Handle upload progress updates
    */
-  const handleProgress = (event: React.SyntheticEvent<HTMLElement>) => {
-    const customEvent = event as any;
-    if (customEvent.detail && typeof customEvent.detail === 'number') {
-      setUploadProgress(Math.round(customEvent.detail * 100));
+  const handleProgress = (event: any) => {
+    if (event?.detail && typeof event.detail === 'number') {
+      setUploadProgress(Math.round(event.detail * 100));
     }
   };
 
