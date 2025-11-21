@@ -95,6 +95,7 @@ TodoWrite:
 - [ ] Review CHANGELOG.md for recent related work
 - [ ] Check database schema for existing tables
 - [ ] Review relevant protocols
+- [ ] Check third-party library patterns: **Mux** (use `any` type for event handlers) - see research.md section 6
 
 **Output:** Document findings in response to user
 

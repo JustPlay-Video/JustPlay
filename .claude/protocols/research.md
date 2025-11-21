@@ -145,6 +145,25 @@ Glob: "app/admin/**/*.tsx", "components/**/*.tsx"
 
 ---
 
+### 6. Third-Party Library Patterns
+
+**Mux Components** (`@mux/mux-uploader-react`, `@mux/mux-player-react`)
+- Event handlers use `any` type (not React SyntheticEvent)
+```typescript
+// Need event data (progress, time, etc.)
+const handleProgress = (event: any) => { ... }
+
+// Don't need event data
+const handleSuccess = () => { ... }
+```
+- Reference: Commits `2bd4254`, `4d6f71f`
+
+**[Future libraries added here]**
+
+**Output:** Document library-specific patterns found in research findings
+
+---
+
 ## Research Output Format
 
 After completing checklist, provide structured summary:
