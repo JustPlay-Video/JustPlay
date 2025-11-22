@@ -50,7 +50,7 @@ export default function NewEpisodePage({
         season_number: parseInt(formData.season_number),
         episode_number: parseInt(formData.episode_number),
         duration_seconds: parseInt(formData.duration_seconds),
-        video_url: formData.video_url || '',
+        video_url: formData.video_url || null,
         mux_upload_id: formData.mux_upload_id || null,
         status: formData.status,
       });

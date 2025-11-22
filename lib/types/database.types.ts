@@ -129,7 +129,7 @@ export interface Database {
           episode_number: number;
           season_number: number;
           duration_seconds: number;
-          video_url: string;
+          video_url: string | null;
           thumbnail_url: string | null;
           status: string;
           mux_asset_id: string | null;
@@ -146,7 +146,7 @@ export interface Database {
           episode_number: number;
           season_number?: number;
           duration_seconds: number;
-          video_url: string;
+          video_url?: string | null;
           thumbnail_url?: string | null;
           status?: string;
           mux_asset_id?: string | null;
@@ -163,7 +163,7 @@ export interface Database {
           episode_number?: number;
           season_number?: number;
           duration_seconds?: number;
-          video_url?: string;
+          video_url?: string | null;
           thumbnail_url?: string | null;
           status?: string;
           mux_asset_id?: string | null;
