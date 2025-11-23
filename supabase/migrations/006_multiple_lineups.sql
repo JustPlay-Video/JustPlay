@@ -73,7 +73,7 @@ CREATE POLICY "Users can view shows in own lineups"
     EXISTS (
       SELECT 1 FROM lineups
       WHERE lineups.id = lineup_shows.lineup_id
-      AND lineups.user_id = auth.uid()
+      AND lineups.profile_id = auth.uid()
     )
   );
 
@@ -85,7 +85,7 @@ CREATE POLICY "Users can add shows to own lineups"
     EXISTS (
       SELECT 1 FROM lineups
       WHERE lineups.id = lineup_shows.lineup_id
-      AND lineups.user_id = auth.uid()
+      AND lineups.profile_id = auth.uid()
     )
   );
 
@@ -97,7 +97,7 @@ CREATE POLICY "Users can update shows in own lineups"
     EXISTS (
       SELECT 1 FROM lineups
       WHERE lineups.id = lineup_shows.lineup_id
-      AND lineups.user_id = auth.uid()
+      AND lineups.profile_id = auth.uid()
     )
   );
 
@@ -109,7 +109,7 @@ CREATE POLICY "Users can remove shows from own lineups"
     EXISTS (
       SELECT 1 FROM lineups
       WHERE lineups.id = lineup_shows.lineup_id
-      AND lineups.user_id = auth.uid()
+      AND lineups.profile_id = auth.uid()
     )
   );
 

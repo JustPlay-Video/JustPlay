@@ -89,6 +89,15 @@ CREATE INDEX IF NOT EXISTS idx_show_ratings_rating ON show_ratings(rating);
 -- Updated At Trigger
 -- ============================================================================
 
+-- Create the update_updated_at_column function if it doesn't exist
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TRIGGER update_show_ratings_updated_at
   BEFORE UPDATE ON show_ratings
   FOR EACH ROW
