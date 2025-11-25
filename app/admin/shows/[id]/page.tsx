@@ -146,6 +146,9 @@ export default async function ShowDetailPage({
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -163,7 +166,7 @@ export default async function ShowDetailPage({
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
-                          episode.status === 'ready'
+                          episode.status === 'ready' || episode.status === 'published'
                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                             : episode.status === 'processing'
                             ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
@@ -172,6 +175,34 @@ export default async function ShowDetailPage({
                       >
                         {episode.status}
                       </span>
+                      {episode.mux_upload_id && !episode.mux_playback_id && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Processing...
+                        </p>
+                      )}
+                      {episode.mux_playback_id && (
+                        <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                          Ready to play
+                        </p>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex space-x-2">
+                        <Link
+                          href={`/admin/shows/${id}/episodes/${episode.id}/edit`}
+                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          Edit
+                        </Link>
+                        {episode.mux_playback_id && (
+                          <Link
+                            href={`/watch/${episode.id}`}
+                            className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                          >
+                            Watch
+                          </Link>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

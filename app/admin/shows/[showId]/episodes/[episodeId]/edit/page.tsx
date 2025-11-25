@@ -1,16 +1,15 @@
 'use client';
 
-import { useState, use } from 'react';
+import { useState, useEffect, use } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import MuxUploader from '@/components/admin/MuxUploader';
 
-export default function NewEpisodePage({
+export default function EditEpisodePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ showId: string; episodeId: string }>;
 }) {
-  const { id: showId } = use(params);
+  const { showId, episodeId } = use(params);
   const router = useRouter();
   const supabase = createClient();
 
@@ -21,13 +20,43 @@ export default function NewEpisodePage({
     episode_number: '1',
     duration_seconds: '',
     video_url: '',
-    mux_upload_id: '',
     status: 'processing',
   });
 
-  const [uploadMethod, setUploadMethod] = useState<'mux' | 'url'>('mux');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+
+  // Load existing episode data
+  useEffect(() => {
+    async function loadEpisode() {
+      try {
+        const { data: episode, error: fetchError } = await supabase
+          .from('episodes')
+          .select('*')
+          .eq('id', episodeId)
+          .single();
+
+        if (fetchError) throw fetchError;
+
+        setFormData({
+          title: episode.title || '',
+          description: episode.description || '',
+          season_number: episode.season_number?.toString() || '1',
+          episode_number: episode.episode_number?.toString() || '1',
+          duration_seconds: episode.duration_seconds?.toString() || '',
+          video_url: episode.video_url || '',
+          status: episode.status || 'processing',
+        });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load episode');
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    loadEpisode();
+  }, [episodeId, supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,42 +64,20 @@ export default function NewEpisodePage({
     setLoading(true);
 
     try {
-      // Validate: either Mux upload OR manual URL required
-      if (uploadMethod === 'mux' && !formData.mux_upload_id) {
-        throw new Error('Please upload a video file using Mux uploader');
-      }
-      if (uploadMethod === 'url' && !formData.video_url) {
-        throw new Error('Please provide a video URL');
-      }
-
-      // Check if episode already exists
-      const { data: existing } = await supabase
+      const { error: updateError } = await supabase
         .from('episodes')
-        .select('id')
-        .eq('show_id', showId)
-        .eq('season_number', parseInt(formData.season_number))
-        .eq('episode_number', parseInt(formData.episode_number))
-        .maybeSingle();
+        .update({
+          title: formData.title,
+          description: formData.description,
+          season_number: parseInt(formData.season_number),
+          episode_number: parseInt(formData.episode_number),
+          duration_seconds: parseInt(formData.duration_seconds),
+          video_url: formData.video_url || null,
+          status: formData.status,
+        })
+        .eq('id', episodeId);
 
-      if (existing) {
-        throw new Error(
-          `Episode S${formData.season_number}E${formData.episode_number} already exists for this show`
-        );
-      }
-
-      const { error: insertError } = await supabase.from('episodes').insert({
-        show_id: showId,
-        title: formData.title,
-        description: formData.description,
-        season_number: parseInt(formData.season_number),
-        episode_number: parseInt(formData.episode_number),
-        duration_seconds: parseInt(formData.duration_seconds),
-        video_url: formData.video_url || null,
-        mux_upload_id: formData.mux_upload_id || null,
-        status: formData.status,
-      });
-
-      if (insertError) throw insertError;
+      if (updateError) throw updateError;
 
       router.push(`/admin/shows/${showId}`);
     } catch (err) {
@@ -80,9 +87,17 @@ export default function NewEpisodePage({
     }
   };
 
+  if (loadingData) {
+    return (
+      <div className="px-4 py-6 sm:px-0">
+        <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="px-4 py-6 sm:px-0">
-      <h1 className="text-3xl font-bold mb-8">Add New Episode</h1>
+      <h1 className="text-3xl font-bold mb-8">Edit Episode</h1>
 
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 max-w-2xl">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -171,68 +186,20 @@ export default function NewEpisodePage({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-3">
-              Video Upload Method *
+            <label htmlFor="video_url" className="block text-sm font-medium mb-2">
+              Video URL
             </label>
-            <div className="flex space-x-4 mb-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="uploadMethod"
-                  value="mux"
-                  checked={uploadMethod === 'mux'}
-                  onChange={(e) => setUploadMethod(e.target.value as 'mux')}
-                  className="mr-2"
-                />
-                <span>Upload File (Mux)</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="uploadMethod"
-                  value="url"
-                  checked={uploadMethod === 'url'}
-                  onChange={(e) => setUploadMethod(e.target.value as 'url')}
-                  className="mr-2"
-                />
-                <span>Manual URL</span>
-              </label>
-            </div>
-
-            {uploadMethod === 'mux' ? (
-              <div>
-                <MuxUploader
-                  onUploadStart={(uploadId) => {
-                    setFormData({ ...formData, mux_upload_id: uploadId, status: 'processing' });
-                  }}
-                  onSuccess={(uploadId) => {
-                    console.log('Upload complete:', uploadId);
-                  }}
-                  onError={(error) => {
-                    setError(error);
-                  }}
-                />
-                {formData.mux_upload_id && (
-                  <p className="mt-2 text-sm text-green-600">
-                    Upload ID: {formData.mux_upload_id}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div>
-                <input
-                  type="url"
-                  id="video_url"
-                  value={formData.video_url}
-                  onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-                  placeholder="https://example.com/video.mp4"
-                  className="w-full rounded-md border-0 py-2 px-3 text-gray-900 dark:text-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600"
-                />
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Enter a publicly accessible video URL
-                </p>
-              </div>
-            )}
+            <input
+              type="url"
+              id="video_url"
+              value={formData.video_url}
+              onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+              placeholder="https://example.com/video.mp4"
+              className="w-full rounded-md border-0 py-2 px-3 text-gray-900 dark:text-white dark:bg-gray-700 ring-1 ring-inset ring-gray-300 dark:ring-gray-600"
+            />
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Note: Mux videos use mux_playback_id, not video_url
+            </p>
           </div>
 
           <div>
@@ -247,7 +214,8 @@ export default function NewEpisodePage({
             >
               <option value="processing">Processing</option>
               <option value="ready">Ready</option>
-              <option value="failed">Failed</option>
+              <option value="published">Published</option>
+              <option value="error">Error</option>
             </select>
           </div>
 
@@ -257,7 +225,7 @@ export default function NewEpisodePage({
               disabled={loading}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50"
             >
-              {loading ? 'Adding...' : 'Add Episode'}
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
             <button
               type="button"
