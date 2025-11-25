@@ -29,7 +29,8 @@
       "Bash(/tmp/run_migration.sh \"supabase/migrations/$migration_\"*.sql)",
       "Bash(done)",
       "Bash(/tmp/run_migration.sh \"supabase/migrations/005_user_engagement.sql\")",
-      "Bash(/tmp/run_migration.sh:*)"
+      "Bash(/tmp/run_migration.sh:*)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []
