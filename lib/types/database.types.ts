@@ -52,6 +52,76 @@ export type Database = {
           },
         ]
       }
+      episode_captions: {
+        Row: {
+          caption_url: string
+          created_at: string | null
+          episode_id: string | null
+          id: string
+          is_default: boolean | null
+          language_code: string
+          language_name: string
+        }
+        Insert: {
+          caption_url: string
+          created_at?: string | null
+          episode_id?: string | null
+          id?: string
+          is_default?: boolean | null
+          language_code: string
+          language_name: string
+        }
+        Update: {
+          caption_url?: string
+          created_at?: string | null
+          episode_id?: string | null
+          id?: string
+          is_default?: boolean | null
+          language_code?: string
+          language_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episode_captions_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "episodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      episode_markers: {
+        Row: {
+          created_at: string | null
+          episode_id: string | null
+          id: string
+          marker_type: string
+          timestamp_seconds: number
+        }
+        Insert: {
+          created_at?: string | null
+          episode_id?: string | null
+          id?: string
+          marker_type: string
+          timestamp_seconds: number
+        }
+        Update: {
+          created_at?: string | null
+          episode_id?: string | null
+          id?: string
+          marker_type?: string
+          timestamp_seconds?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episode_markers_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "episodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       episodes: {
         Row: {
           created_at: string
@@ -107,6 +177,112 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "episodes_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string | null
+          id: string
+          show_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          show_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          show_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineup_progress: {
+        Row: {
+          created_at: string | null
+          current_round: number | null
+          current_show_position: number | null
+          id: string
+          last_watched_at: string | null
+          lineup_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_round?: number | null
+          current_show_position?: number | null
+          id?: string
+          last_watched_at?: string | null
+          lineup_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_round?: number | null
+          current_show_position?: number | null
+          id?: string
+          last_watched_at?: string | null
+          lineup_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineup_progress_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineup_shows: {
+        Row: {
+          created_at: string | null
+          id: string
+          lineup_id: string | null
+          position: number
+          show_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          lineup_id?: string | null
+          position: number
+          show_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          lineup_id?: string | null
+          position?: number
+          show_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineup_shows_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lineup_shows_show_id_fkey"
             columns: ["show_id"]
             isOneToOne: false
             referencedRelation: "shows"
@@ -236,6 +412,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      show_ratings: {
+        Row: {
+          created_at: string | null
+          id: string
+          rating: string
+          show_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          rating: string
+          show_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          rating?: string
+          show_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "show_ratings_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shows: {
         Row: {
@@ -419,7 +630,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reorder_lineup_positions: {
+        Args: { p_lineup_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
