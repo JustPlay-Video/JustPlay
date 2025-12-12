@@ -8,6 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Browse & Discovery System (Phase A)** - Complete catalog browsing experience
+  - Full-text search with debounced input across show titles and descriptions
+  - Genre filtering with API endpoint (`/api/genres`)
+  - Age rating filter (All, Kids, Family, Teen)
+  - Sort options (Recently Added, Title A-Z, Popular)
+  - Recently Added section with materialized view for performance
+  - Search indexes on shows table for fast querying
+  - Migration 012_search_indexes.sql with optimized indexes
+  - SearchBar component with client-side debouncing
+  - FilterPanel component for advanced filtering
+  - RecentlyAdded server component for new content discovery
+- **Lineup Builder UI (Phase B)** - Drag-and-drop lineup management
+  - @dnd-kit library integration for accessible drag-and-drop
+  - DraggableLineupList component with sortable show cards
+  - NextEpisodeCard component showing upcoming episode
+  - RotationPreview component visualizing round-robin rotation
+  - Lineup reordering API endpoint (`/api/lineups/[id]/reorder`)
+  - Next episode calculation API endpoint (`/api/lineups/[id]/next-episode`)
+  - Enhanced lineup detail page with drag-drop interface
+  - Visual round-robin episode sequence preview
+- **Polish & UX Improvements (Phase C)** - Enhanced user experience
+  - ContinueWatchingCarousel component with progress tracking
+  - Resume playback from dashboard
+  - Visual progress bars on episode thumbnails
+  - Parental controls system with child profiles
+  - ChildProfileManager component with modal forms
+  - Child profile API endpoints (`/api/profiles/children`)
+  - Child profile creation, deletion, and management
+  - Time limit settings (daily viewing minutes)
+  - Birth year tracking for age-appropriate content
+  - LoadingSkeleton components for better perceived performance
+  - EmptyState component for zero-state UIs
+  - Dashboard enhancements with quick links
+  - Improved navigation across all user pages
 - **Mux Video Integration** - Complete video upload and playback system
   - Direct upload API endpoint (`/api/mux/upload`) with admin authentication
   - Webhook handler (`/api/mux/webhook`) for processing status updates

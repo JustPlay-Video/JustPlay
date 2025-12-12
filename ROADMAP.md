@@ -1,7 +1,7 @@
 # JustPlay Development Roadmap
 
-**Last Updated:** 2024-11-14
-**Current Phase:** Phase 1, Week 3-4 Complete
+**Last Updated:** 2025-12-11
+**Current Phase:** Phase 1 Complete (Weeks 1-10)
 
 ---
 
@@ -21,67 +21,68 @@
 - [x] Admin access control (is_admin flag)
 - [x] Basic CRUD operations
 
+### ✅ Phase 1, Week 5-6: User-Facing Features (Complete)
+
+**Browse Catalog:**
+- [x] Public browse page for shows
+- [x] Show detail pages for users
+- [x] Episode listings
+- [x] Search/filter functionality
+- [x] Genre browsing
+- [x] Recently added section
+- [x] Full-text search with indexes
+- [x] Age rating and sort filters
+
+**Video Integration:**
+- [x] Mux video platform selected
+- [x] Video hosting account configured
+- [x] Integrated video upload in admin
+- [x] Video playback tested and working
+
+---
+
+### ✅ Phase 1, Week 7-8: Lineup Builder (Complete)
+
+**Lineup Creation:**
+- [x] Lineup management UI
+- [x] Drag-and-drop show ordering
+- [x] Visual rotation preview
+- [x] Round-robin episode progression
+- [x] Enhanced lineup detail page
+
+**Lineup Playback:**
+- [x] Next episode calculation
+- [x] Episode progression logic
+- [x] Round-robin rotation system
+- [x] Visual preview of upcoming episodes
+
+**Note:** Focused on round-robin rotation model (stream when you please) rather than scheduled programming.
+
+---
+
+### ✅ Phase 1, Week 9-10: Polish & Features (Complete)
+
+**Watch History:**
+- [x] Track viewing progress
+- [x] Resume where you left off
+- [x] Continue watching section on dashboard
+- [x] Visual progress bars on episodes
+
+**Parental Controls:**
+- [x] Child profile creation
+- [x] Time limit settings (daily minutes)
+- [x] Birth year tracking
+- [x] Child profile management UI
+
+**UI/UX Polish:**
+- [x] Responsive design refinement
+- [x] Loading states with skeletons
+- [x] Empty state components
+- [x] Enhanced dashboard with quick links
+
 ---
 
 ## Next Steps (Immediate Priorities)
-
-### Phase 1, Week 5-6: User-Facing Features
-
-**Primary Focus: Browse Catalog**
-- [ ] Public browse page for shows
-- [ ] Show detail pages for users
-- [ ] Episode listings
-- [ ] Search/filter functionality
-- [ ] Genre browsing
-
-**Video Integration Decision:**
-- Decide between Cloudflare Stream vs Mux
-- Set up video hosting account
-- Integrate video upload in admin
-- Test video playback
-
-**Priority:** High - Users need to see content
-
----
-
-### Phase 1, Week 7-8: Lineup Builder (Core Feature)
-
-**Lineup Creation:**
-- [ ] Lineup management UI
-- [ ] Day/time scheduling interface
-- [ ] Drag-and-drop episode ordering
-- [ ] Visual weekly schedule grid
-- [ ] Profile assignment (for parental controls)
-
-**Lineup Playback:**
-- [ ] Lineup player view
-- [ ] Episode progression logic
-- [ ] "What's on now" functionality
-- [ ] Continuous playback mode
-
-**Priority:** Critical - This is the differentiating feature
-
----
-
-### Phase 1, Week 9-10: Polish & Features
-
-**Watch History:**
-- [ ] Track viewing progress
-- [ ] Resume where you left off
-- [ ] Continue watching section
-- [ ] Watch history page
-
-**Parental Controls:**
-- [ ] Child profile creation
-- [ ] Time limit settings
-- [ ] Schedule restrictions
-- [ ] Content filtering by age
-
-**UI/UX Polish:**
-- [ ] Responsive design refinement
-- [ ] Loading states
-- [ ] Error messages
-- [ ] Animations/transitions
 
 ---
 
@@ -237,9 +238,13 @@
 ### Phase 1 Success Criteria
 - ✅ Working platform deployed
 - ✅ Admin can manage content
-- [ ] Users can browse shows
-- [ ] Users can create lineups
-- [ ] Users can watch content
+- ✅ Users can browse shows
+- ✅ Users can create lineups
+- ✅ Users can watch content
+- ✅ Search and filtering functional
+- ✅ Drag-drop lineup management
+- ✅ Continue watching / resume playback
+- ✅ Parental controls system
 
 ### Phase 2 Success Criteria
 - [ ] 15-20 shows available
@@ -263,17 +268,18 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Phase 1: Core Platform (Weeks 1-8)                          │
+│ Phase 1: Core Platform (Weeks 1-10)                         │
 │ ✅ Week 1-2: Foundation                                     │
 │ ✅ Week 3-4: Admin Dashboard                                │
-│ ⏳ Week 5-6: User Features (browse, video)                  │
-│ ⏳ Week 7-8: Lineup Builder                                 │
+│ ✅ Week 5-6: User Features (browse, video)                  │
+│ ✅ Week 7-8: Lineup Builder                                 │
+│ ✅ Week 9-10: Polish & UX                                   │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 2: Content (Weeks 9-10)                               │
+│ Phase 2: Content (Weeks 11-12)                              │
 │ ⏳ Acquire public domain content                            │
 │ ⏳ Partner with indie creators                              │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 3: Beta & Polish (Weeks 11-16)                        │
+│ Phase 3: Beta & Polish (Weeks 13-16)                        │
 │ ⏳ Beta testing                                             │
 │ ⏳ Press outreach                                           │
 │ ⏳ Stripe integration                                       │
