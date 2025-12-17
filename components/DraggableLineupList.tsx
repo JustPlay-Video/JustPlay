@@ -20,6 +20,19 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+/**
+ * DraggableLineupList component for reordering shows in a lineup
+ * Uses @dnd-kit for accessible drag-and-drop functionality
+ *
+ * @component
+ * @param {Show[]} shows - Array of shows in the lineup
+ * @param {string} lineupId - ID of the lineup being edited
+ * @example
+ * ```tsx
+ * <DraggableLineupList shows={lineupShows} lineupId="123" />
+ * ```
+ */
+
 interface Show {
   id: string;
   title: string;

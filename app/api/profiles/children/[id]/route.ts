@@ -1,6 +1,10 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Child Profile DELETE endpoint
+ * Deletes a child profile with ownership verification
+ */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

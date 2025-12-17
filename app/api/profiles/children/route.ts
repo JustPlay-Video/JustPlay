@@ -1,6 +1,10 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Child Profiles API endpoint
+ * Creates a new child profile for parental controls
+ */
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
